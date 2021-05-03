@@ -25,6 +25,7 @@ function App() {
   {
     var copyText = document.querySelector('.avatar-img-src')
     copyText.select();
+    console.log(copyText)
     copyText.setSelectionRange(0, 99999)
     document.execCommand("copy");
     setBtnTxt('copied to clipboard')

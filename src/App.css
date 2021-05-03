@@ -35,10 +35,12 @@
 }
 .avatar-img-src
 {
-  visibility:hidden;
-  width: 0px;
-  height:0px;
-  display: inline-block;
+  color:transparent;
+  background:transparent;
+  border:none;
+  outline:none;
+  font-size: 1px;
+  cursor:pointer;
 }
 .download-btn
 {
