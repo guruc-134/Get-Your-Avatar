@@ -1,72 +1,82 @@
-import  React , { Component } from 'react';
-import { CardList } from './components/card-list/card-list.component';
-import { SearchBox } from './components/search-box/search-box.component';
+import React from 'react'
+import {useState,useEffect} from 'react';
 import './App.css';
-
-class App extends Component
-{
-  constructor()
+import Info from './components/Info/Info.component';
+function App() {
+  var [seed,setSeed] = useState('seed');
+  var [type,setType] = useState('bottts');
+  var [image,setImage] = useState(`https://avatars.dicebear.com/api/${type}/${seed}.svg`)
+  var [buttonTxt, setBtnTxt] = useState('Get Embedded HTML')
+  var [wantInfo,setWantinfo] = useState(false)
+  
+  const handleChangeType = (event) =>
   {
-    super();
+    event.preventDefault()
+    setType(event.target.value)
 
-    this.state=
-    {
-      pokemons : [],
-      searchField : ""
-    }; 
   }
-  componentDidMount()
+  const handleChangeSeed = (event) =>
   {
-    const fetchpokemon=()=>
-    {
+    event.preventDefault()
+    setSeed(event.target.value)
+  }
 
-        // array for storing all the 150 promises inorder to perform parallel async fetch to save time
-        const promises = [] ;
-        //  max value 898
-        for( let i=1;i<=898;i++)
+  const copyTocursor = () =>
+  {
+    var copyText = document.querySelector('.avatar-img-src')
+    copyText.select();
+    copyText.setSelectionRange(0, 99999)
+    document.execCommand("copy");
+    setBtnTxt('copied to clipboard')
+  }
+  const handleInfoChange = (e)=>
+  {
+    setWantinfo(true)
+  }
+  useEffect(() =>
+  {
+    image = `https://avatars.dicebear.com/api/${type}/${seed}.svg`;
+    setImage(image)
+    setBtnTxt('Get Embedded HTML')
+  },[seed,type,setWantinfo])
+
+  return (
+    <div  className = 'app'>
+        <button className='info-btn' onClick={handleInfoChange}><img src="https://img.icons8.com/emoji/48/000000/information-emoji.png"/></button>
         {
-          const url=`https://pokeapi.co/api/v2/pokemon/${i}`;
-          promises.push( fetch(url)
-            .then(res =>res.json() ) ); 
+          wantInfo?<Info wantInfo = {wantInfo} setWantInfo={setWantinfo} />:null
         }
-        // all the promises are pushed into an array and once all of them are resolved then our details are collected
-        var pokemon= []
-        Promise.all(promises).then(results =>
-        {
-              pokemon= results.map((data) => (
-              {
-                name:data.name,
-                id:data.id,
-                image:`https://pokeres.bastionbot.org/images/pokemon/${data.id}.png`,
-                type:data.types.map((type) => type.type.name).join(', ')
-              }));
-            this.setState({ pokemons:pokemon})
-          });      
-    };
-    fetchpokemon()
-  }
-
-  handleChange=(e)=>
-  {
-    this.setState( { searchField:e.target.value})
-  }
-  render()
-  {
-    // console.log(this.state.pokemons)
-    const { pokemons, searchField } = this.state;
-    const filteredPokemons =  pokemons.filter( pokemon => 
-    pokemon.name.toLowerCase().includes(searchField.toLowerCase()) )
-    return (
-      <div className="App">
-        <img className='image_heading' src='https://cdn.bulbagarden.net/upload/4/4b/Pok%C3%A9dex_logo.png' alt='pokemon logo' height='50px'/>
-        <br/>
-        <SearchBox
-          placeholder = '  search pokemons'
-          handleChange = {this.handleChange} />
-        <CardList pokemons={filteredPokemons}/>
+      <div className = 'header'>
+        <h1>Random Avatar Generator</h1>
       </div>
-    );
-  }
+      <div className='image-displayer'>
+          <img className='avatar-img' src ={`https://avatars.dicebear.com/api/${type}/${seed}.svg`} alt='image for this text cannot be generated'/> 
+          <input className='avatar-img-src' value={`<img src=${image} alt=${seed}-${type}/>`} readOnly/>
+          
+      </div>
+      <div className='userInput'>
+          <span>Your Avatar's name </span>
+          <input className='input-element' type='text' placeholder='name' onChange={handleChangeSeed}/>
+          <label htmlFor="types"> Choose a type: </label>
+          <select className='select input-element'name="types" id="avatar-types" onChange={handleChangeType}>
+            <option value="bottts">bottts</option>
+            <option value="male">male</option>
+            <option value="female">female</option>
+            <option value="human">human</option>
+            <option value="identicon">identicon</option>
+            <option value="initials">initials</option>
+            <option value="avataaars">avataaars</option>
+            <option value="jdenticon">jdenticon</option>
+            <option value="gridy">gridy</option>
+            <option value="micah">micah</option>
+          </select>
+      </div>
+          <button className='download-btn' onClick={copyTocursor}>
+              {buttonTxt}
+          </button>
+
+    </div>
+  )
 }
 
-export default App;
+export default App

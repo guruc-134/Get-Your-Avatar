@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background:linear-gradient(to left ,rgba(255, 255, 1, 0.812), rgba(252, 63, 6, 0.763)  ,rgba(0, 0, 253, 0.637));
+  background:linear-gradient(to left ,rgb(1, 255, 98), rgb(25, 228, 228)  ,rgba(230, 149, 28, 0.952));
   font-family:'Courgette', cursive;
 }
 
